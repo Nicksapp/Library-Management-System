@@ -1,0 +1,49 @@
+<%- include('./layout/header') %>
+    <div class="bookWrapper ui vertically divided grid" style="padding: 0 200px;">
+        <div class="two column row">
+            <div class="column" style="display: flex;">
+                <div>
+                    <h1 style="font-size: 26px; color: #494949;"><%= book.name %></h1>
+                    <img style="width: 200px;" src="<%= "/img/"+book.cover %>">
+                </div>
+                <div style="margin-top: 45px; margin-left: 10px;">
+                    <p>   
+                        <span style="color: #666666;">Author</span>: <%= book.author%>
+                    </p>
+                    <p> 
+                        <span style="color: #666666;">Press</span>: <%= book.press%>
+                    </p>
+                    <p>
+                        <span style="color: #666666;">Published Date</span>: <%= book.date%>
+                    </p>
+                    <p> 
+                        <span style="color: #666666;">Score</span>: 
+                        <span class="ui star rating" data-rating="<%= book.score %>" data-max-rating="5"></span>
+                    </p>
+                    <p>
+                        <span style="color: #666666;">Inventory</span>: <%= book.inventory%>
+                    </p>
+                </div>
+            </div>
+            <div class="column">
+                <div style="width: 100px;" class="ui vertical animated button orange right floated" tabindex="0">
+                    <div class="hidden content">Borrow</div>
+                    <div class="visible content">
+                        <i class="book icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="one column row">
+            <div class="column">
+                <h2 style="color:#4fc08d; font-size: 20px;">Brief Introduction</h2>
+                <p><%- book.introduction %></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function() {
+            $('.ui .rating').rating('disable');
+        })
+    </script>
+<%- include('./layout/footer') %>

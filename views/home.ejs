@@ -1,0 +1,19 @@
+<%- include('./layout/header') %>
+    <div class="ui stackable five column grid" style="padding: 0 100px;">
+        <% books.forEach(function (book) { %>
+            <div class="column">
+                <div class="ui card cardWrap">
+                    <a class="image" href="/library/<%= book._id%>">
+                        <img class="imgTarget" style="height: 240px;" src="<%= "/img/"+book.cover %>">
+                    </a>
+                    <div class="content">
+                        <a class="header" href="/library/<%= book._id%>"><%= book.name %></a>
+                        <div class="meta ">
+                            <a><%= book.author %></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+<%- include('./layout/footer') %>

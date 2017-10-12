@@ -1,0 +1,426 @@
+<%- include('./layout/header') %>
+    <div class="library-container" style="padding: 20px;">
+        <div>
+            <button id="add" class="ui primary button large">Add</button>
+        </div>
+        <table class="ui celled padded table show-list">
+            <thead>
+                <tr>
+                    <th class="ui center aligned">Cover</th>
+                    <th class="ui center aligned">Name</th>
+                    <th class="ui center aligned">Author</th>
+                    <th class="ui center aligned">Press</th><!-- 出版社-->
+                    <th class="ui center aligned">Published Date</th><!-- 出版日期-->
+                    <th class="ui center aligned">Score</th>
+                    <th class="ui center aligned">Borrowed</th><!-- 已借出-->
+                    <th class="ui center aligned">Inventory</th><!-- 库存-->
+                    <th class="ui center aligned">Introduction</th>
+                    <th class="ui center aligned">Operating</th><!-- 操作-->
+                </tr>
+            </thead>
+
+            <!-- 表格 -->
+            <tbody>
+                <% books.forEach(function (book) { %>
+                   <tr 
+                       data-id="<%= book._id %>"
+                       data-name="<%= book.name %>"
+                       data-author="<%= book.author %>"
+                       data-press="<%= book.press %>"
+                       data-date="<%= book.date %>"
+                       data-score="<%= book.score %>"
+                       data-inventory="<%= book.inventory %>"
+                       data-introduction="<%- book.introduction %>">
+                        <td class="ui center aligned">
+                            <img alt="cover" style="width: 135px;" src="<%= "/img/"+book.cover %>" >
+                        </td>
+                        <td class="ui center aligned single line"><%= book.name %></td>
+                        <td class="ui center aligned single line"><%= book.author %></td>
+                        <td class="ui center aligned"><%= book.press %></td>
+                        <td class="ui center aligned single line"><%= book.date %></td>
+                        <td class="ui center aligned">
+                            <div class="ui star rating" data-rating="<%= book.score %>" data-max-rating="5"></div>
+                        </td>
+                        <td class="ui right aligned single line">
+                            Has lent 0 books <br>
+                            <a href="#">Examine</a>
+                        </td>
+                        <td class="ui center aligned"><%= book.inventory %></td>
+                        <td>
+                            <div class="alertMSG-wrap">
+                                <div class="alertMSG ui custom button">View</div>
+                            </div>
+                            <div class="ui custom popup top left transition hidden">
+                                <p><%- book.introduction %></p>
+                            </div>
+                        </td>
+                        <td class="ui single line aligned">
+                            <button class="ui green button edit">Edit</button>
+                            <button class="ui orange button delete">Delete</button>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+
+            <!-- 分页 -->
+            <tfoot>
+                <!-- <tr>
+                    <th colspan="9">
+                        <div class="ui right floated pagination menu">
+                            <a class="icon item">
+                                <i class="left chevron icon"></i>
+                            </a>
+                            <a class="item">1</a>
+                            <a class="item">2</a>
+                            <a class="item">3</a>
+                            <a class="item">4</a>
+                            <a class="icon item">
+                                <i class="right chevron icon"></i>
+                            </a>
+                        </div>
+                    </th>
+                </tr> -->
+            </tfoot>
+
+            <!-- 模态框 -->
+            <!-- 新增 book -->
+            <div class="addBook ui fullscreen modal transition hidden">
+                <i class="close icon"></i>
+                <div class="header">Add Book </div>
+                <div class="content">
+                    <div class="ui form">
+                        <form class="addForm ui form" method="post" action="/library" enctype="multipart/form-data">
+                            <div class="field required">
+                                <label>Name</label>
+                                <input placeholder="Name" type="text" name="name">
+                            </div>
+                            <div class="field required">
+                                <label>Author</label>
+                                <input placeholder="Author" type="text" name="author">
+                            </div>
+                            <div class="field required">
+                                <label>Press</label>
+                                <input placeholder="Press" type="text" name="press">
+                            </div>
+                            <div class="field required">
+                                <label>Inventory</label>
+                                <input placeholder="Inventory" type="number" name="inventory">
+                            </div>
+                            <div class="field required">
+                                <label>Published Date</label>
+                                <input placeholder="Published Date" type="text" name="date">
+                            </div>
+                            <div class="field required">
+                                <label>Score</label>
+                                <input placeholder="Score" type="number" name="score">
+                            </div>
+                            <div class="field required">
+                                <label>Cover</label>
+                                <input type="file" name="cover">
+                            </div>
+                            <div class="field required">
+                                <label>Introduction</label>
+                                <textarea name="introduction" rows="5"></textarea>
+                            </div>
+                            <div style="display: none;">
+                                <input type="button"  class="ui button" value="Cancel">
+                                <input id="realSubmit" type="submit" class="ui green button" value="Submit">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="actions">
+                    <div id="formCancel" class="ui button">Cancel</div>
+                    <div id="formSubmit" class="ui green button">Submit</div>
+                </div>
+            </div>
+            <!-- 编辑 book -->
+            <div class="editBook ui fullscreen modal transition hidden">
+                <i class="close icon"></i>
+                <div class="header">Edit Book </div>
+                <div class="content">
+                    <div class="ui form">
+                        <form class="editForm ui form" method="post" action="/library" enctype="multipart/form-data">
+                            <div class="field required">
+                                <label>Name</label>
+                                <input class="name" placeholder="Name" type="text" name="name">
+                            </div>
+                            <div class="field required">
+                                <label>Author</label>
+                                <input class="author" placeholder="Author" type="text" name="author">
+                            </div>
+                            <div class="field required">
+                                <label>Press</label>
+                                <input class="press" placeholder="Press" type="text" name="press">
+                            </div>
+                            <div class="field required">
+                                <label>Inventory</label>
+                                <input class="inventory" placeholder="Inventory" type="number" name="inventory">
+                            </div>
+                            <div class="field required">
+                                <label>Published Date</label>
+                                <input class="date" placeholder="Published Date" type="text" name="date">
+                            </div>
+                            <div class="field required">
+                                <label>Score</label>
+                                <input class="score" placeholder="Score" type="number" name="score">
+                            </div>
+                            <div class="field required">
+                                <label>Introduction</label>
+                                <textarea class="introduction" name="introduction" rows="5"></textarea>
+                            </div>
+                            <div style="display: none;">
+                                <input type="button"  class="ui button" value="Cancel">
+                                <input id="realEditSubmit" type="submit" class="ui green button" value="Submit">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="actions">
+                    <div id="formEditCancel" class="ui button">Cancel</div>
+                    <div id="formEditSubmit" class="ui green button">Submit</div>
+                </div>
+            </div>
+            <!-- 删除 book -->
+            <div class="ui small test modal transition hidden">
+                <div class="header">Delete your book </div>
+                <div class="content">
+                    <p>Are you sure you want to delete your books?</p>
+                </div>
+                <div class="actions">
+                    <div id="noDelete" class="ui negative button">No </div>
+                    <div id="yesDelete" class="ui positive right labeled icon button" onclick="$(this).find('#deleteLink')[0].click();">
+                        <a style="color: #fff; " id="deleteLink" href="#">Yes</a> <i class="checkmark icon"></i> 
+                    </div>
+                </div>
+            </div>
+
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+           
+            var Library = {
+                init: function () {
+                    this.pageInit();
+                    this.bindEvent();
+                },
+                pageInit: function () {
+                    $('.show-list.ui .rating').rating('disable');
+                    $('.alertMSG').popup();
+                },
+                bindEvent: function () {
+                    var editBtn = $('.edit'),
+                        deleteBtn = $('.delete'),
+                        noDelete = $('#noDelete'),
+                        yesDelete = $('#yesDelete'),
+                        addBtn = $('#add'),
+                        alertMSG = $(".alertMSG");
+                    // 删除
+                    $.each(deleteBtn, function(index, item) {
+                        $(item).on('click', function(event) {
+                            var itemId = $(this).closest('tr').data('id');
+                            $('.small.modal').find('#deleteLink')[0].href = "/library/"+itemId+"/remove";
+                            $('.small.modal').modal('show');
+                        })  
+                    });
+                    $.each(alertMSG, function(index, item) {
+                        $(item)
+                            .popup({
+                                popup: $(this).closest('.alertMSG-wrap').siblings('.popup'),
+                                on: 'click'
+                            });
+                    })
+                    // 新增
+                    $('#formCancel').on('click', function() {
+                        $('.fullscreen.modal').modal('hide');
+                    })
+                    $('#realSubmit').on('click', function() {
+                        submit();
+                    })
+                    $('#formSubmit').on('click', function() {
+                        $('#realSubmit').click();
+                    })
+                    addBtn.on('click', function() {
+                        $('.addBook.fullscreen.modal').modal('show');
+                    })
+                    // 编辑
+                    $('#formEditCancel').on('click', function () {
+                        $('.editBook.fullscreen.modal').modal('hide');
+                    })
+                    $('#realEditSubmit').on('click', function() {
+                        editSubmit();
+                    })
+                    $('#formEditSubmit').on('click', function() {
+                        $('#realEditSubmit').click();
+                    })
+                    $.each(editBtn, function(index, item) {
+                        $(item).on('click', function() {
+                            $('.editBook.fullscreen.modal').modal('show');
+                            var itemData = $(item).closest('tr').data();
+                            var editDom = $('.editBook.modal');
+                            $(editDom).find('.name')[0].value = itemData.name;
+                            $(editDom).find('.author')[0].value = itemData.author;
+                            $(editDom).find('.press')[0].value = itemData.press;
+                            $(editDom).find('.inventory')[0].value = itemData.inventory;
+                            $(editDom).find('.date')[0].value = itemData.date;
+                            $(editDom).find('.score')[0].value = itemData.score;
+                            $(editDom).find('.introduction')[0].value = itemData.introduction; 
+                            $(editDom).find('.editForm')[0].action = "/library/" + itemData.id + "/edit";
+                        })
+                    })
+                }
+            }
+            Library.init();
+             //add验证
+            function submit() {
+                $(".ui.form").form(
+                    {
+                        inline: true,
+                        on: 'blur',
+                        fields: {
+                            name: {
+                                identifier: 'name',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Book name should not be empty'
+                                }]
+                            },
+                            author: {
+                                identifier: 'author',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Author should not be empty'
+                                }, {
+                                    type: 'maxLength[20]',
+                                    prompt: 'Please limit the name to 1-10 characters'
+                                }]
+                            },
+                            press: {
+                                identifier: 'press',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Press should not be empty'
+                                }]
+                            },
+                            score: {
+                                identifier: 'score',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Score should not be empty'
+                                },{
+                                    type: 'integer[1..5]',
+                                    prompt: 'Score should be 1 to 5'
+                                }]
+                            },
+                            inventory: {
+                                identifier: 'inventory',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Inventory should not be empty'
+                                }]
+                            },
+                            date: {
+                                identifier: 'date',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Date should not be empty'
+                                }]
+                            },
+                            cover: {
+                                identifier: 'cover',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Cover should not be empty'
+                                }]
+                            },
+                            introduction: {
+                                identifier: 'introduction',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Introduction should not be empty'
+                                }]
+                            }
+                        },
+                    }, {
+                        onSuccess: function () {
+                            console.log('ok')
+                        }
+                    }
+                );
+            }
+            function editSubmit() {
+                $(".ui.form").form(
+                    {
+                        inline: true,
+                        on: 'blur',
+                        fields: {
+                            name: {
+                                identifier: 'name',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Book name should not be empty'
+                                }]
+                            },
+                            author: {
+                                identifier: 'author',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Author should not be empty'
+                                }, {
+                                    type: 'maxLength[20]',
+                                    prompt: 'Please limit the name to 1-10 characters'
+                                }]
+                            },
+                            press: {
+                                identifier: 'press',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Press should not be empty'
+                                }]
+                            },
+                            score: {
+                                identifier: 'score',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Score should not be empty'
+                                },{
+                                    type: 'integer[1..5]',
+                                    prompt: 'Score should be 1 to 5'
+                                }]
+                            },
+                            inventory: {
+                                identifier: 'inventory',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Inventory should not be empty'
+                                }]
+                            },
+                            date: {
+                                identifier: 'date',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Date should not be empty'
+                                }]
+                            },
+                            introduction: {
+                                identifier: 'introduction',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Introduction should not be empty'
+                                }]
+                            }
+                        },
+                    }, {
+                        onSuccess: function () {
+                            console.log("edit ok!")
+                        }
+                    }
+                );
+            }
+        })
+        
+    </script>
+    
+<%- include('./layout/footer') %>
