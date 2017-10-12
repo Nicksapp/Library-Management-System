@@ -56,3 +56,14 @@ node index.js
 * As an administrator I Want to return books
 * As an administrator I Want to quick borrow
 * As an administrator I Want to quick return
+
+## Preview
+
+![Jietu20171012-222756@2x](http://7xo8ne.com1.z0.glb.clouddn.com/Jietu20171012-222756@2x.jpg)
+![Jietu20171012-222807@2x](http://7xo8ne.com1.z0.glb.clouddn.com/Jietu20171012-222807@2x.jpg)
+![Jietu20171012-222818@2x](http://7xo8ne.com1.z0.glb.clouddn.com/Jietu20171012-222818@2x.jpg)
+![Jietu20171012-222845@2x](http://7xo8ne.com1.z0.glb.clouddn.com/Jietu20171012-222845@2x.jpg)
+![Jietu20171012-222904@2x](http://7xo8ne.com1.z0.glb.clouddn.com/Jietu20171012-222904@2x.jpg)
+![Jietu20171012-222921@2x](http://7xo8ne.com1.z0.glb.clouddn.com/Jietu20171012-222921@2x.jpg)
+![Jietu20171012-222927@2x](http://7xo8ne.com1.z0.glb.clouddn.com/Jietu20171012-222927@2x.jpg)
+
