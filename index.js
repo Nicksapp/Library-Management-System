@@ -6,6 +6,9 @@ var flash = require('connect-flash'); // 页面通知提示的中间件，基于
 var config = require('config-lite')(__dirname); // 读取配置文件
 var routes = require('./routes'); // 路由
 var pkg = require('./package');
+var winston = require('winston'); // 日志记录
+var expressWinston = require('express-winston'); // 日志记录
+
 var app = express();
 
 // 设置模板目录
@@ -51,8 +54,36 @@ app.use(function (req, res, next) {
     next();
 });
 
+// 记录正常请求日志的中间件要放到 routes(app) 之前，记录错误请求日志的中间件要放到 routes(app) 之后
+// 正常请求的日志
+app.use(expressWinston.logger({
+    transports: [
+        new (winston.transports.Console)({
+            json: true,
+            colorize: true
+        }),
+        new winston.transports.File({
+            filename: 'logs/success.log'
+        })
+    ]
+}));
+
 // 路由
 routes(app);
+
+// 错误请求的日志
+app.use(expressWinston.errorLogger({
+    transports: [
+        new winston.transports.Console({
+            json: true,
+            colorize: true
+        }),
+        new winston.transports.File({
+            filename: 'logs/error.log'
+        })
+    ]
+}));
+
 
 // error page render
 app.use(function (err, req, res, next) {

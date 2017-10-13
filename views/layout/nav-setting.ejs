@@ -20,9 +20,8 @@
         </div>
        
         <% if (user) { %>
-            <a class="item" href="/posts?author=<%= user._id %>"><%= user.name %></a>
+            <a class="item" href="/profile"><%= user.name %></a>
             <div class="divider"></div>
-            <!-- <a class="item" href="/posts/create">发表文章</a> -->
             <a class="item" href="/signout">Sign out</a>
             <% if (user.isAdmin) {%>
                 <div class="ui dropdown item">
