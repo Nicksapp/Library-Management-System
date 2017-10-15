@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="column">
-                <div style="width: 100px;" class="ui vertical animated button orange right floated" tabindex="0">
+                <div style="width: 100px;" class="borrowBtn ui vertical animated button orange right floated" tabindex="0">
                     <div class="hidden content">Borrow</div>
                     <div class="visible content">
                         <i class="book icon"></i>
@@ -40,10 +40,27 @@
                 <p><%- book.introduction %></p>
             </div>
         </div>
+
+        <!-- 借 book -->
+        <div class="ui small test modal transition hidden">
+            <div class="header">Borrow the book </div>
+            <div class="content">
+                <p>Are you sure you want to Borrow this book?</p>
+            </div>
+            <div class="actions">
+                <div id="no" class="ui negative button">No </div>
+                <div id="yes" class="ui positive right labeled icon button" onclick="$(this).find('#sureLink')[0].click();">
+                    <a style="color: #fff; " id="sureLink" href="/library/<%= book._id%>/borrow">Yes</a> <i class="checkmark icon"></i>
+                </div>
+            </div>
+        </div>
     </div>
     <script>
         $(function() {
             $('.ui .rating').rating('disable');
+            $('.borrowBtn').on('click', function() {
+                 $('.small.modal').modal('show');
+            })
         })
     </script>
 <%- include('./layout/footer') %>

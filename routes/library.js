@@ -4,6 +4,8 @@ var express = require('express');
 var router = express.Router();
 
 var LibraryModel = require('../models/library');
+var BorrowBookModel = require('../models/borrowBooks');
+var checkLogin = require('../middlewares/check').checkLogin;
 var checkIsAdmin = require('../middlewares/check').checkIsAdmin;
 
 router.get('/', checkIsAdmin, function (req, res, next) {
@@ -127,4 +129,40 @@ router.post('/:bookId/edit', checkIsAdmin, function (req, res, next) {
         })
         .catch(next);
 });
+
+
+// POST 借书
+router.get('/:bookId/borrow', checkLogin, function (req, res, next) {
+    var userId = req.session.user._id;
+    var bookId = req.params.bookId;
+    
+    var borrow = {
+        userId: userId,
+        bookId: bookId
+    };
+    LibraryModel.getRawBookById(borrow.bookId)
+        .then(function (book) {
+            var inventory = book.inventory;
+            if (inventory > 1) {
+                LibraryModel.updateBookById(borrow.bookId, '59dcc048234ad64c210a7bae', { inventory: inventory - 1 })
+                    .then(function () {
+                        BorrowBookModel.create(borrow)
+                            .then(function () {
+                                // LibraryModel.updateBookById
+                                req.flash('success', 'Borrow successfully!');
+                                // 成功后跳转到上一页
+                                res.redirect('back');
+                            })
+                            .catch(next)
+                    })
+            } else {
+                req.flash('error', 'Zero inventory!');
+                // 成功后跳转到上一页
+                res.redirect('back');
+            }
+        })
+});
+
+
+
 module.exports = router;
