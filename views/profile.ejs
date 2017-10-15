@@ -1,4 +1,112 @@
 <%- include('./layout/header') %>
-<h1><%= user.name %></h1> 
-   
-<%- include('./layout/footer') %>
+    <div class="userWrapper ui vertically divided grid" style="padding: 0 200px;">
+        <div class="two column row">
+            <div class="column" style="display: flex;">
+                <div>
+                    <h1 style="font-size: 26px; color: #494949;">
+                        <%= user.name %>
+                    </h1>
+                    <img style="width: 200px;" src="<%= "img/"+user.avatar %>">
+                </div>
+                <div style="margin-top: 45px; margin-left: 10px;">
+                    <p>
+                        <span style="color: #666666;">Id</span>:
+                        <%= user.id%>
+                    </p>
+                    <p>
+                        <span style="color: #666666;">Gender</span>:
+                        <%= user.gender%>
+                    </p>
+                    <p>
+                        <span style="color: #666666;">Introduction</span>:
+                        <%= user.bio%>
+                    </p>
+                </div>
+            </div>
+            <div class="column">
+                <div style="width: 100px;" class="ui vertical animated button orange right floated" tabindex="0">
+                    <div class="hidden content">Edit</div>
+                    <div class="visible content">
+                        <i class="user icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="one column row">
+            <div class="column">
+                <h2 style="color:#4fc08d; font-size: 20px;">Borrowed books</h2>
+                <div class="ui items">
+                    <div class="item">
+                        <div class="ui small image">
+                            <img style="height: 180px;" src="/img/upload_3a5ef2fcdf6f7679eab74faf6ab10d05.jpg">
+                        </div>
+                        <div class="content">
+                            <div class="header">箭头谷露营</div>
+                            <div class="meta">
+                                <span class="price">1200 美元</span>
+                                <span class="stay">1 个月</span>
+                            </div>
+                            <div class="description">
+                                <p>“二O一六年，我独自一人在东京生活了一年，东京也拯救了我。”受日本国际交流基金会之邀，蒋方舟在东京独居了一年。她越来越喜欢写漫长的日记，觉得孤独地生活一辈子也不是坏事。 日记共有四十六则，收录了她最新的短篇小说、演讲和时评，驳杂不失纯粹。从社会、艺术到当今中日两国世间百态，都有其独特又不失严肃的描摹与思考。
+                                同时，这也是一本病历，记录了一个人要活成本来面目所需付出的努力。“就像在东京度过的一年并没有把我变成一个新人，我们只是更像自己本来该成为的样子。” 本书邀请日本纪录片导演伊藤王树一路旅拍，镜头下是东京的日常以及“在别处”
+                                。</p>
+                            </div>
+                            <div class="extra returnBtn">
+                                <div class="ui right floated primary button">Return the book <i class="right chevron icon"></i> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="ui small image">
+                            <img style="height: 180px;" src="/img/upload_3a5ef2fcdf6f7679eab74faf6ab10d05.jpg">
+                        </div>
+                        <div class="content">
+                            <div class="header">箭头谷露营</div>
+                            <div class="meta">
+                                <span class="price">1200 美元</span>
+                                <span class="stay">1 个月</span>
+                            </div>
+                            <div class="description">
+                                <p>“二O一六年，我独自一人在东京生活了一年，东京也拯救了我。”受日本国际交流基金会之邀，蒋方舟在东京独居了一年。她越来越喜欢写漫长的日记，觉得孤独地生活一辈子也不是坏事。 日记共有四十六则，收录了她最新的短篇小说、演讲和时评，驳杂不失纯粹。从社会、艺术到当今中日两国世间百态，都有其独特又不失严肃的描摹与思考。
+                                同时，这也是一本病历，记录了一个人要活成本来面目所需付出的努力。“就像在东京度过的一年并没有把我变成一个新人，我们只是更像自己本来该成为的样子。” 本书邀请日本纪录片导演伊藤王树一路旅拍，镜头下是东京的日常以及“在别处”
+                                。</p>
+                            </div>
+                            <div class="extra returnBtn">
+                                <div class="ui right floated primary button">Return the book <i class="right chevron icon"></i> </div>
+                            </div>
+                        </div>
+                    </div>
+                      
+                </div>
+            </div>
+        </div>
+
+        <!-- 借 book -->
+        <div class="ui small test modal transition hidden">
+            <div class="header">Return the book </div>
+            <div class="content">
+                <p>Are you sure you want to return this book?</p>
+            </div>
+            <div class="actions">
+                <div id="noDelete" class="ui negative button">No </div>
+                <div id="yesDelete" class="ui positive right labeled icon button" onclick="$(this).find('#deleteLink')[0].click();">
+                    <a style="color: #fff; " id="deleteLink" href="#">Yes</a> <i class="checkmark icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $('.ui .rating').rating('disable');
+            // 删除
+            var returnBtn = $('.returnBtn');
+            $.each(returnBtn, function (index, item) {
+                $(item).on('click', function (event) {
+                    // var itemId = $(this).closest('tr').data('id');
+                    // $('.small.modal').find('#deleteLink')[0].href = "/library/" + itemId + "/remove";
+                    $('.small.modal').modal('show');
+                })
+            });
+        })
+    </script>
+    <%- include('./layout/footer') %>
