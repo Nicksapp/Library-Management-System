@@ -66,4 +66,7 @@ node index.js
 ![Jietu20171012-222904@2x](http://7xo8ne.com1.z0.glb.clouddn.com/Jietu20171012-222904@2x.jpg)
 ![Jietu20171012-222921@2x](http://7xo8ne.com1.z0.glb.clouddn.com/Jietu20171012-222921@2x.jpg)
 ![Jietu20171012-222927@2x](http://7xo8ne.com1.z0.glb.clouddn.com/Jietu20171012-222927@2x.jpg)
+![Jietu20171016-204509@2x](http://7xo8ne.com1.z0.glb.clouddn.com/Jietu20171016-204509@2x.jpg)
+![Jietu20171016-204527@2x](http://7xo8ne.com1.z0.glb.clouddn.com/Jietu20171016-204527@2x.jpg)
+![Jietu20171016-204542@2x](http://7xo8ne.com1.z0.glb.clouddn.com/Jietu20171016-204542@2x.jpg)
 
