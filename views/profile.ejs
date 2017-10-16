@@ -4,27 +4,29 @@
             <div class="column" style="display: flex;">
                 <div>
                     <h1 style="font-size: 26px; color: #494949;">
-                        <%= user.name %>
+                        <%= profile.name %>
                     </h1>
-                    <img style="width: 200px;" src="<%= "img/"+user.avatar %>">
+                    <div style="width: 200px; height: 200px; background: #eee; overflow: hidden;">
+                        <img style="width: 200px; height: 200px;"  src="<%= "/img/"+profile.avatar %>">
+                    </div>
                 </div>
                 <div style="margin-top: 45px; margin-left: 10px;">
                     <p>
                         <span style="color: #666666;">Id</span>:
-                        <%= user.id%>
+                        <%= profile.id%>
                     </p>
                     <p>
                         <span style="color: #666666;">Gender</span>:
-                        <%= user.gender%>
+                        <%= profile.gender%>
                     </p>
                     <p>
                         <span style="color: #666666;">Introduction</span>:
-                        <%= user.bio%>
+                        <%= profile.bio%>
                     </p>
                 </div>
             </div>
             <div class="column">
-                <div style="width: 100px;" class="ui vertical animated button orange right floated" tabindex="0">
+                <div style="width: 100px;" class="ui disabled vertical animated button orange right floated" tabindex="0">
                     <div class="hidden content">Edit</div>
                     <div class="visible content">
                         <i class="user icon"></i>
@@ -37,18 +39,18 @@
                 <h2 style="color:#4fc08d; font-size: 20px;">Borrowed books</h2>
                 <div class="ui items">
                    <% borrow.forEach(function(item) {%>
-                    <div class="borrowItem item" data-id="<%= item._id %>" data-bookid="<%= item.bookId%>">
+                    <div class="borrowItem item" data-id="<%= item.id %>" data-bookid="<%= item.bookId%>">
                         <div class="ui small image">
-                            <img style="height: 180px;" src="/img/upload_3a5ef2fcdf6f7679eab74faf6ab10d05.jpg">
+                            <img style="height: 180px;" src="/img/<%= item.cover %>">
                         </div>
                         <div class="content">
                             <div class="header"><%= item.name %></div>
                             <div class="meta">
-                                <span class="price">1200 美元</span>
-                                <span class="stay">1 个月</span>
+                                <span class="price"><%= item.author %></span>
+                                <span class="stay"><%= item.created_at %> (borrowed time)</span>
                             </div>
                             <div class="description">
-                                <p></p>
+                                <p><%= item.introduction %></p>
                             </div>
                             <div class="extra returnBtn">
                                 <div class="ui right floated primary button">Return the book <i class="right chevron icon"></i> </div>
@@ -84,7 +86,7 @@
                     var itemId = $(this).closest('.borrowItem').data('id'),
                         itemBookId = $(this).closest('.borrowItem').data('bookid');
                     
-                    $('.small.modal').find('#sureLink')[0].href = "/library/" + itemId + "/return/" + itemBookId;
+                    $('.small.modal').find('#sureLink')[0].href = "/profile/" + itemId + "/return/" + itemBookId;
                     $('.small.modal').modal('show');
                 })
             });

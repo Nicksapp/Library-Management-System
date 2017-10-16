@@ -12,12 +12,19 @@ module.exports = {
                     .addCreatedAt()
                     .exec();
     },
-    getBorrowBooksCount: function(userId) {
+    getBorrowBooksCount: function(bookId) {
         return BorrowBooks
-                    .count({ userId: userId })
+                    .count({ bookId: bookId })
                     .exec();
     },
     returnBookById: function (id) {
         return BorrowBooks.remove({ _id: id }).exec();
     },
+    getBorrowUsers: function(bookId) {
+        return BorrowBooks
+                    .find({ bookId: bookId})
+                    .sort({ _id: 1 })
+                    .addCreatedAt()
+                    .exec();
+    }
 }

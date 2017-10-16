@@ -8,15 +8,30 @@ var BorrowBookModel = require('../models/borrowBooks');
 var checkLogin = require('../middlewares/check').checkLogin;
 var checkIsAdmin = require('../middlewares/check').checkIsAdmin;
 
-router.get('/', checkIsAdmin, function (req, res, next) {
+router.get('/', checkIsAdmin, async function (req, res, next) {
     var admin = req.query.admin;
-    LibraryModel.getBooks(admin)
-        .then(function (books) {
+    
+    try {
+        var books = await LibraryModel.getBooks(admin);
+        books.forEach(async function(book) {
+            try {
+                var borrowCount = await BorrowBookModel.getBorrowBooksCount(book._id);
+                book.borrowCount = borrowCount;
+            } catch (error) {
+                req.flash('error', 'Something go wrong, please try again!');
+            }
+        }, this);
+
+        setTimeout(() => {
             res.render('library', {
                 books: books
             });
-        })
-        .catch(next);
+        }, 1000)
+    } catch (error) {
+        req.flash('error', 'Something go wrong, please try again!');
+        next();
+    }
+
 });
 
 // POST 
@@ -37,10 +52,10 @@ router.post('/', checkIsAdmin, function (req, res, next) {
     // 校验参数
     try {
         if (!bookData.name.length) {
-            throw new Error('请填写标题');
+            throw new Error('Please fill in the name!');
         }
         if (!bookData.introduction.length) {
-            throw new Error('请填写简介');
+            throw new Error('Please fill in the introduction!');
         }
     } catch (e) {
         req.flash('error', e.message);
@@ -82,7 +97,7 @@ router.get('/:bookId', function (req, res, next) {
         .then(function (result) {
             var book = result[0];
             if (!book) {
-                throw new Error('该book不存在');
+                throw new Error('The book does not exist!');
             }
 
             res.render('book', {
@@ -99,7 +114,7 @@ router.get('/:bookId/remove', checkIsAdmin, function (req, res, next) {
 
     LibraryModel.delBookById(bookId, admin)
         .then(function () {
-            req.flash('success', '删除文章成功');
+            req.flash('success', 'Delete the book successfully!');
             // 删除成功后跳转到主页
             res.redirect('/library');
         })
@@ -123,7 +138,7 @@ router.post('/:bookId/edit', checkIsAdmin, function (req, res, next) {
 
     LibraryModel.updateBookById(bookId, admin, bookData)
         .then(function () {
-            req.flash('success', '编辑文章成功');
+            req.flash('success', 'Edit book success!');
             // 编辑成功后跳转到上一页
             res.redirect(`/library`);
         })
@@ -132,7 +147,7 @@ router.post('/:bookId/edit', checkIsAdmin, function (req, res, next) {
 
 
 // POST 借书
-router.get('/:bookId/borrow', checkLogin, function (req, res, next) {
+router.get('/:bookId/borrow', checkLogin,async function (req, res, next) {
     var userId = req.session.user._id;
     var bookId = req.params.bookId;
     
@@ -140,27 +155,35 @@ router.get('/:bookId/borrow', checkLogin, function (req, res, next) {
         userId: userId,
         bookId: bookId
     };
-    LibraryModel.getRawBookById(borrow.bookId)
-        .then(function (book) {
-            var inventory = book.inventory;
-            if (inventory > 1) {
-                LibraryModel.updateBookById(borrow.bookId, '59dcc048234ad64c210a7bae', { inventory: inventory - 1 })
-                    .then(function () {
-                        BorrowBookModel.create(borrow)
-                            .then(function () {
-                                // LibraryModel.updateBookById
-                                req.flash('success', 'Borrow successfully!');
-                                // 成功后跳转到上一页
-                                res.redirect('back');
-                            })
-                            .catch(next)
-                    })
-            } else {
-                req.flash('error', 'Zero inventory!');
-                // 成功后跳转到上一页
+    try {
+        var book = await LibraryModel.getRawBookById(borrow.bookId);
+        if (book.inventory >= 1) {
+            try {
+                await LibraryModel.updateBookById(borrow.bookId, '59dcc048234ad64c210a7bae', {
+                    inventory: book.inventory - 1
+                })
+                try {
+                    await BorrowBookModel.create(borrow)
+                    req.flash('success', 'Borrow Successfully!');
+                    res.redirect('back');
+                } catch (error) {
+                    req.flash('error', 'Something go wrong, please try again!');
+                    res.redirect('back');
+                }
+            } catch (error) {
+                req.flash('error', 'Something go wrong, please try again!');
                 res.redirect('back');
             }
-        })
+            
+        } else {
+            req.flash('error', 'Zero inventory!');
+            res.redirect('back');
+        }
+    } catch (error) {
+        req.flash('error', 'Something go wrong, please try again!');
+        res.redirect('back');
+    }
+    
 });
 
 

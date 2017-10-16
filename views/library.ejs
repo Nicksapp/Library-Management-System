@@ -42,8 +42,10 @@
                             <div class="ui star rating" data-rating="<%= book.score %>" data-max-rating="5"></div>
                         </td>
                         <td class="ui right aligned single line">
-                            Has lent 0 books <br>
-                            <a href="#">Examine</a>
+                            Has lent <%= book.borrowCount %> books <br>
+                            <% if (book.borrowCount > 0) { %>
+                            <a href="/borrow/<%= book._id %>">Examine</a>
+                            <% } %>
                         </td>
                         <td class="ui center aligned"><%= book.inventory %></td>
                         <td>

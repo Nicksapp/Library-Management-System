@@ -1,4 +1,4 @@
-<div class="ui menu">
+<div class="ui menu <%if (user) {%><% if (user.isAdmin) {%> inverted <% } %> <% } %>">
     <div class="header item">Library</div>
     <!-- <a class="active item">Link</a> -->
     <!-- <a class="item">Link</a> -->
@@ -9,7 +9,7 @@
                 <i class="search icon"></i>
                 <input id="searchInput" type="text" name="payload" placeholder="Title or Author">
                 <a id="realSearchPath" href="/search/" style="color: #fff;">
-                    <div id="search" class="ui animated green button" tabindex="0">
+                    <div id="search" class="ui animated green button <%if (user) {%><% if (user.isAdmin) {%> inverted<% } %><% } %>" tabindex="0">
                         <div class="visible content">Submit</div>
                         <div class="hidden content">
                             <i class="right arrow icon"></i>
@@ -20,7 +20,7 @@
         </div>
        
         <% if (user) { %>
-            <a class="item" href="/profile"><%= user.name %></a>
+            <a class="item" href="/profile/<%= user._id %>"><%= user.name %></a>
             <div class="divider"></div>
             <a class="item" href="/signout">Sign out</a>
             <% if (user.isAdmin) {%>

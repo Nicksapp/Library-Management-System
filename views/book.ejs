@@ -23,15 +23,19 @@
                     <p>
                         <span style="color: #666666;">Inventory</span>: <%= book.inventory%>
                     </p>
+                    <p>
+                        <span style="color: #666666;">Pv</span>: <%= book.pv%>
+                    </p>
+                    
                 </div>
             </div>
             <div class="column">
-                <div style="width: 100px;" class="borrowBtn ui vertical animated button orange right floated" tabindex="0">
+                <div style="width: 100px;" class="borrowBtn ui vertical animated button orange right floated <% if (!book.inventory) {%> disabled <% } %>" tabindex="0">
                     <div class="hidden content">Borrow</div>
                     <div class="visible content">
                         <i class="book icon"></i>
                     </div>
-                </div>
+                </div>           
             </div>
         </div>
         <div class="one column row">
@@ -39,6 +43,7 @@
                 <h2 style="color:#4fc08d; font-size: 20px;">Brief Introduction</h2>
                 <p><%- book.introduction %></p>
             </div>
+            
         </div>
 
         <!-- 借 book -->
@@ -47,12 +52,14 @@
             <div class="content">
                 <p>Are you sure you want to Borrow this book?</p>
             </div>
-            <div class="actions">
-                <div id="no" class="ui negative button">No </div>
-                <div id="yes" class="ui positive right labeled icon button" onclick="$(this).find('#sureLink')[0].click();">
-                    <a style="color: #fff; " id="sureLink" href="/library/<%= book._id%>/borrow">Yes</a> <i class="checkmark icon"></i>
+                <div class="actions" >
+                    <div id="no" class="ui negative button">No </div>
+                    <a id="sureLink" href="/library/<%= book._id%>/borrow" style="color: #fff; ">
+                        <div id="yes" class="ui positive right labeled icon button" onclick="">
+                            Yes <i class="checkmark icon"></i>
+                        </div>
+                    </a>
                 </div>
-            </div>
         </div>
     </div>
     <script>
