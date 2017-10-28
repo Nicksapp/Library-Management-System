@@ -34,7 +34,7 @@ router.get('/', checkIsAdmin, async function (req, res, next) {
 
 });
 
-// POST 
+// POST  Add Book
 router.post('/', checkIsAdmin, function (req, res, next) {
     var admin = req.session.user._id;
 
@@ -62,9 +62,19 @@ router.post('/', checkIsAdmin, function (req, res, next) {
         return res.redirect('back');
     }
 
+    const IDSet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];    
+
+    var IDNo = Math.floor(Math.random() * 999);
+    if ((IDNo + '').length === 2 ) {
+        IDNo = '0' + IDNo;
+    } else if ((IDNo + '').length === 1) {
+        IDNo = '00' + IDNo; 
+    }
+    var realName = bookData.name + '(' + IDSet[Math.floor(Math.random() * 25)] + IDSet[Math.floor(Math.random() * 25)]+'-'+ IDNo + ')';
+
     var book = {
         admin: bookData.admin,
-        name: bookData.name,
+        name: realName,
         author: bookData.author,
         press: bookData.press,
         inventory: bookData.inventory,
@@ -80,7 +90,7 @@ router.post('/', checkIsAdmin, function (req, res, next) {
             // 此 post 是插入 mongodb 后的值，包含 _id
             book = result.ops[0];
             req.flash('success', 'Add successfully!');
-            // 发表成功后跳转到该文章页
+            // 发表成功后跳转到
             res.redirect(`/library`);
         })
         .catch(next);
@@ -99,7 +109,7 @@ router.get('/:bookId', function (req, res, next) {
             if (!book) {
                 throw new Error('The book does not exist!');
             }
-
+            book.location = book.name.slice(-7, -1);
             res.render('book', {
                 book: book
             });

@@ -34,6 +34,8 @@ module.exports = {
                     name: queryData
                 }, {
                     author: queryData
+                }, {
+                    press: queryData
                 }]
             })
             .sort({ _id: -1 })

@@ -1,4 +1,9 @@
 <%- include('./layout/header') %>
+    <style>
+        .blockHidden {
+            display: none !important;
+        }
+    </style>
     <div class="bookWrapper ui vertically divided grid" style="padding: 0 200px;">
         <div class="two column row">
             <div class="column" style="display: flex;">
@@ -7,6 +12,9 @@
                     <img style="width: 200px;" src="<%= "/img/"+book.cover %>">
                 </div>
                 <div style="margin-top: 45px; margin-left: 10px;">
+                    <p>   
+                        <span style="color: #666666;">Location</span>: <%= book.location%>
+                    </p>
                     <p>   
                         <span style="color: #666666;">Author</span>: <%= book.author%>
                     </p>
@@ -36,6 +44,12 @@
                         <i class="book icon"></i>
                     </div>
                 </div>           
+                <div style="width: 150px;" class="ui reBtn vertical animated button blue right floated <% if (book.inventory) {%> blockHidden <% } %> "tabindex="0">
+                    <div class="hidden content">Make a Reservation</div>
+                    <div class="visible content">
+                        <i class="flag icon"></i>
+                    </div>
+                </div>           
             </div>
         </div>
         <div class="one column row">
@@ -47,7 +61,7 @@
         </div>
 
         <!-- 借 book -->
-        <div class="ui small test modal transition hidden">
+        <div class="ui small test modal bModel transition hidden">
             <div class="header">Borrow the book </div>
             <div class="content">
                 <p>Are you sure you want to Borrow this book?</p>
@@ -61,12 +75,30 @@
                     </a>
                 </div>
         </div>
+
+        <div class="ui small test modal alertModal transition hidden">
+            <div class="header">Make a Reservation </div>
+            <div class="content">
+                <p>Are you sure you want to make a reservation for this book?</p>
+            </div>
+                <div class="actions" >
+                    <div id="no" class="ui negative button">No </div>
+                    <a id="sureLink" href="#" style="color: #fff; ">
+                        <div id="yes" class="ui positive right labeled icon button" onclick="">
+                            Yes <i class="checkmark icon"></i>
+                        </div>
+                    </a>
+                </div>
+        </div>
     </div>
     <script>
         $(function() {
             $('.ui .rating').rating('disable');
             $('.borrowBtn').on('click', function() {
-                 $('.small.modal').modal('show');
+                 $('.small.bModel').modal('show');
+            })
+            $('.reBtn').on('click', function() {
+                 $('.small.alertModal').modal('show');
             })
         })
     </script>

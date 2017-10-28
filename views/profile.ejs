@@ -45,9 +45,12 @@
                         </div>
                         <div class="content">
                             <div class="header"><%= item.name %></div>
-                            <div class="meta">
-                                <span class="price"><%= item.author %></span>
-                                <span class="stay"><%= item.created_at %> (borrowed time)</span>
+                            <div class="meta" style="display: flex; justify-content: space-between;">
+                                <div>
+                                    <span class="price"><%= item.author %></span>
+                                    <span class="stay"><%= item.created_at %> (borrowed time)</span>
+                                </div>
+                                <span class="stay" style="color: red;"><%= item.returnTime %> (return time)</span>
                             </div>
                             <div class="description">
                                 <p><%= item.introduction %></p>

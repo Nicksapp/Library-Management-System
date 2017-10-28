@@ -18,10 +18,16 @@ router.get('/:userId', checkLogin, async function (req, res, next) {
         bBook.forEach(async function(item) {
             var book = await LibraryModel.getRawBookById(item.bookId);
 
+            var temp = item.created_at.split(" ");
+            var returnTime = temp[0].split("-");
+            var rtMonth = parseInt(returnTime[1]) + 2;
+            var rTime = returnTime[0] + "-" + rtMonth + "-" + returnTime[2];
+
             result.push({
                 id: item._id,
                 bookId: item.bookId,
                 created_at: item.created_at,
+                returnTime: rTime,
                 name: book.name,
                 author: book.author,
                 cover: book.cover,

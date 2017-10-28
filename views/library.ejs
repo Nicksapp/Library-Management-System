@@ -3,7 +3,7 @@
         <div>
             <button id="add" class="ui primary button large">Add</button>
         </div>
-        <table class="ui celled padded table show-list">
+        <table class="ui celled padded table show-list selectable">
             <thead>
                 <tr>
                     <th class="ui center aligned">Cover</th>
@@ -47,7 +47,12 @@
                             <a href="/borrow/<%= book._id %>">Examine</a>
                             <% } %>
                         </td>
-                        <td class="ui center aligned"><%= book.inventory %></td>
+                        <td class="ui center aligned <% if (book.inventory <= 0) { %>warning<% } %>">
+                            <%= book.inventory %> <br>
+                            <% if (book.inventory <=0) { %>
+                                <a href="/borrow/<%= book._id %>">Examine the Reservation</a>
+                            <% } %>
+                        </td>
                         <td>
                             <div class="alertMSG-wrap">
                                 <div class="alertMSG ui custom button">View</div>
@@ -58,7 +63,7 @@
                         </td>
                         <td class="ui single line aligned">
                             <button class="ui green button edit">Edit</button>
-                            <button class="ui orange button delete">Delete</button>
+                            <button class="ui orange button delete <% if (book.borrowCount > 0) { %>disabled<% } %>">Delete</button>
                         </td>
                     </tr>
                 <% }) %>

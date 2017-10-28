@@ -1,14 +1,24 @@
 <%- include('./layout/header') %>
-    <div class="ui stackable five column grid" style="padding: 0 100px;">
+    <style>
+        .ui .image:hover {
+            border-bottom: 3px solid #4fc08d;
+        }
+    </style>
+    <div class="ui stackable four column grid" style="padding: 0 100px;">
         <% books.forEach(function (book) { %>
-            <div class="column">
+            <div class="column bookItem" style="margin: 20px 0;">
                 <div class="ui card cardWrap">
+                    
                     <a class="image" href="/library/<%= book._id%>">
-                        <img class="imgTarget" style="height: 240px;" src="<%= "/img/"+book.cover %>">
+                        <img class="imgTarget" style="height: 360px;" src="<%= "/img/"+book.cover %>">
                     </a>
                     <div class="content">
-                        <a class="header" href="/library/<%= book._id%>"><%= book.name %></a>
-                        <div class="meta ">
+                        <div  style="width: 100%;display: flex; justify-content: space-between;">
+                            <a style="font-size: 18px; color: #000;" class="header" href="/library/<%= book._id%>"><%= book.name %></a>
+                            <div class="ui star rating" data-rating="<%= book.score %>" data-max-rating="5"></div>
+                        </div>
+                        
+                        <div class="meta">
                             <a><%= book.author %></a>
                         </div>
                     </div>
@@ -16,4 +26,10 @@
             </div>
         <% }) %>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.ui .rating').rating('disable');
+        })
+    </script>
 <%- include('./layout/footer') %>
