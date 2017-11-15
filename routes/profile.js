@@ -5,6 +5,7 @@ var UserModel = require('../models/users');
 var LibraryModel = require('../models/library');
 var BorrowBookModel = require('../models/borrowBooks');
 var checkLogin = require('../middlewares/check').checkLogin;
+var checkIsAdmin = require('../middlewares/check').checkIsAdmin;
 
 router.get('/:userId', checkLogin, async function (req, res, next) {
     var currentUser = req.session.user;
@@ -20,7 +21,7 @@ router.get('/:userId', checkLogin, async function (req, res, next) {
 
             var temp = item.created_at.split(" ");
             var returnTime = temp[0].split("-");
-            var rtMonth = parseInt(returnTime[1]) + 2;
+            var rtMonth = parseInt(returnTime[1]) + 1;
             var rTime = returnTime[0] + "-" + rtMonth + "-" + returnTime[2];
 
             result.push({
@@ -45,8 +46,8 @@ router.get('/:userId', checkLogin, async function (req, res, next) {
     }
 });
 
-// POST return book 
-router.get('/:borrowId/return/:bookId', checkLogin,async function (req, res, next) {
+// POST return book 还书
+router.get('/:borrowId/return/:bookId', checkIsAdmin, async function (req, res, next) {
     var borrowId = req.params.borrowId,
         bookId = req.params.bookId,
         user = req.session.user._id;

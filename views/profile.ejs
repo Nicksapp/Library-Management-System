@@ -1,16 +1,16 @@
 <%- include('./layout/header') %>
     <div class="userWrapper ui vertically divided grid" style="padding: 0 200px;">
+        <h1 style="font-size: 26px; color: #494949;">
+            <%= profile.name %>
+        </h1>
         <div class="two column row">
             <div class="column" style="display: flex;">
                 <div>
-                    <h1 style="font-size: 26px; color: #494949;">
-                        <%= profile.name %>
-                    </h1>
                     <div style="width: 200px; height: 200px; background: #eee; overflow: hidden;">
                         <img style="width: 200px; height: 200px;"  src="<%= "/img/"+profile.avatar %>">
                     </div>
                 </div>
-                <div style="margin-top: 45px; margin-left: 10px;">
+                <div style="margin-left: 30px;">
                     <p>
                         <span style="color: #666666;">Id</span>:
                         <%= profile.id%>
@@ -26,12 +26,12 @@
                 </div>
             </div>
             <div class="column">
-                <div style="width: 100px;" class="ui disabled vertical animated button orange right floated" tabindex="0">
+                <!-- <div style="width: 100px;" class="ui disabled vertical animated button orange right floated" tabindex="0">
                     <div class="hidden content">Edit</div>
                     <div class="visible content">
                         <i class="user icon"></i>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="one column row">
@@ -41,7 +41,7 @@
                    <% borrow.forEach(function(item) {%>
                     <div class="borrowItem item" data-id="<%= item.id %>" data-bookid="<%= item.bookId%>">
                         <div class="ui small image">
-                            <img style="height: 180px;" src="/img/<%= item.cover %>">
+                            <img class="item-cover" style="height: 180px;" src="/img/<%= item.cover %>">
                         </div>
                         <div class="content">
                             <div class="header"><%= item.name %></div>
@@ -50,14 +50,16 @@
                                     <span class="price"><%= item.author %></span>
                                     <span class="stay"><%= item.created_at %> (borrowed time)</span>
                                 </div>
-                                <span class="stay" style="color: red;"><%= item.returnTime %> (return time)</span>
+                                <span class="stay" style="color: red;">Please return the book before <%= item.returnTime %></span>
                             </div>
                             <div class="description">
                                 <p><%= item.introduction %></p>
                             </div>
+                            <% if(user._id == '59dcc048234ad64c210a7bae'){%>
                             <div class="extra returnBtn">
                                 <div class="ui right floated primary button">Return the book <i class="right chevron icon"></i> </div>
                             </div>
+                            <% } %>
                         </div>
                     </div>
                     <% }) %>
@@ -92,6 +94,12 @@
                     $('.small.modal').find('#sureLink')[0].href = "/profile/" + itemId + "/return/" + itemBookId;
                     $('.small.modal').modal('show');
                 })
+            });
+
+            $('.item-cover').each(function (index, item) {
+                if (item.src.split("http://localhost:3000/img/")[1].slice(0, 4) === "http") {
+                    item.src = item.src.split("http://localhost:3000/img/")[1];
+                }
             });
         })
     </script>

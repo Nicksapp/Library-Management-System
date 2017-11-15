@@ -4,9 +4,13 @@
     $(document).ready(function () {
         // 延时清除掉成功、失败提示信息
         if ($('.ui.success.message').length > 0) {
-            $('.ui.success.message').fadeOut(1000)
+            setTimeout(function() {
+                $('.ui.success.message').fadeOut(400)
+            }, 3000)
         } else if ($('.ui.error.message').length > 0) {
-            $('.ui.error.message').fadeOut(1000)
+            setTimeout(function() {
+                $('.ui.error.message').fadeOut(400)
+            }, 3000)
         }
 
         //  点击按钮弹出下拉框

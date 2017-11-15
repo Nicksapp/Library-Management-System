@@ -42,8 +42,8 @@ app.use(require('express-formidable')({
 
 // 设置模板全局常量, app.locals 上通常挂载常量信息（如博客名、描述、作者信息），res.locals 上通常挂载变量信息
 app.locals.blog = {
-    title: 'Online Library System',
-    description: 'Welcome to Group01\'s online library system!'
+    title: 'Thinker',
+    description: 'Welcome to Thinker OLS from Group01!'
 };
 
 // 添加模板必需的三个变量

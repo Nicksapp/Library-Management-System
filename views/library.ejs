@@ -1,7 +1,17 @@
 <%- include('./layout/header') %>
+    <style>
+        .turn-around {
+            animation: turn_around 1.5s linear infinite reverse;
+        }
+        @keyframes turn_around {
+            from { transform: rotate(0); }
+            to { transform: rotate(360deg); }
+        }
+
+    </style>
     <div class="library-container" style="padding: 20px;">
         <div>
-            <button id="add" class="ui primary button large">Add</button>
+            <button id="add" class="ui primary button large"><i class="plus icon"></i>Add</button>
         </div>
         <table class="ui celled padded table show-list selectable">
             <thead>
@@ -32,7 +42,7 @@
                        data-inventory="<%= book.inventory %>"
                        data-introduction="<%- book.introduction %>">
                         <td class="ui center aligned">
-                            <img alt="cover" style="width: 135px;" src="<%= "/img/"+book.cover %>" >
+                            <img class="item-cover" alt="cover" style="width: 135px;" src="<%= "/img/"+book.cover %>" >
                         </td>
                         <td class="ui center aligned single line"><%= book.name %></td>
                         <td class="ui center aligned single line"><%= book.author %></td>
@@ -62,8 +72,10 @@
                             </div>
                         </td>
                         <td class="ui single line aligned">
-                            <button class="ui green button edit">Edit</button>
-                            <button class="ui orange button delete <% if (book.borrowCount > 0) { %>disabled<% } %>">Delete</button>
+                            <button class="ui green button edit">
+                                Edit</button>
+                            <button class="ui orange button delete <% if (book.borrowCount > 0) { %>disabled<% } %>">
+                                Delete</button>
                         </td>
                     </tr>
                 <% }) %>
@@ -88,58 +100,84 @@
                     </th>
                 </tr> -->
             </tfoot>
-
+            
             <!-- 模态框 -->
             <!-- 新增 book -->
             <div class="addBook ui fullscreen modal transition hidden">
                 <i class="close icon"></i>
                 <div class="header">Add Book </div>
                 <div class="content">
-                    <div class="ui form">
+                    <div class="add-form ui form">
                         <form class="addForm ui form" method="post" action="/library" enctype="multipart/form-data">
-                            <div class="field required">
-                                <label>Name</label>
-                                <input placeholder="Name" type="text" name="name">
+                            <div class="field required inline">
+                                <label style="width:100px;">Name</label>
+                                <input style="width:500px;" class="name" placeholder="Name" type="text" name="name">
                             </div>
-                            <div class="field required">
-                                <label>Author</label>
-                                <input placeholder="Author" type="text" name="author">
+                            <div class="field required inline">
+                                <label style="width:100px;">Location</label>
+                                <input style="width:500px;" class="location" placeholder="Location" type="text" name="location">
                             </div>
-                            <div class="field required">
-                                <label>Press</label>
-                                <input placeholder="Press" type="text" name="press">
+                            <div class="field required inline">
+                                <label style="width:100px;">Author</label>
+                                <input style="width:500px;" class="author" placeholder="Author" type="text" name="author">
                             </div>
-                            <div class="field required">
-                                <label>Inventory</label>
-                                <input placeholder="Inventory" type="number" name="inventory">
+                            <div class="field required inline">
+                                <label style="width:100px;">Press</label>
+                                <input style="width:500px;" class="press" placeholder="Press" type="text" name="press">
                             </div>
-                            <div class="field required">
-                                <label>Published Date</label>
-                                <input placeholder="Published Date" type="text" name="date">
+                            <div class="field required inline">
+                                <label style="width:100px;">Inventory</label>
+                                <input style="width:500px;" class="inventory" placeholder="Inventory" type="number" name="inventory">
                             </div>
-                            <div class="field required">
-                                <label>Score</label>
-                                <input placeholder="Score" type="number" name="score">
+                            <div class="field required  inline">
+                                <label style="width:100px;">Published Date</label>
+                                <input style="width:500px;" class="date" placeholder="Published Date" type="text" name="date">
                             </div>
-                            <div class="field required">
-                                <label>Cover</label>
-                                <input type="file" name="cover">
+                            <div class="field required  inline">
+                                <label style="width:100px;">Score</label>
+                                <input style="width:500px;" class="score" placeholder="Score" type="number" name="score">
                             </div>
-                            <div class="field required">
-                                <label>Introduction</label>
-                                <textarea name="introduction" rows="5"></textarea>
+                            <div class="field  inline">
+                                <label style="width:100px;">Cover</label>
+                                <input style="width:500px;" class="cover" type="file" name="cover">
+                            </div>
+                            <div class="field  inline">
+                                <label style="width:100px;">Cover Url</label>
+                                <input style="width:500px;" class="cover_url" placeholder="cover url" type="text" name="cover_url">
+                            </div>
+                            <div class="field required ">
+                                <label style="width:100px;">Introduction</label>
+                                <textarea class="introduction" name="introduction" rows="5"></textarea>
                             </div>
                             <div style="display: none;">
-                                <input type="button"  class="ui button" value="Cancel">
+                                <input type="button" class="ui button" value="Cancel">
                                 <input id="realSubmit" type="submit" class="ui green button" value="Submit">
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="actions">
-                    <div id="formCancel" class="ui button">Cancel</div>
-                    <div id="formSubmit" class="ui green button">Submit</div>
+                <div class="actions" style="display: flex; justify-content: space-between;">
+                    <div class="ui" style="display: flex;">
+                        <div class="ui form">
+                            <div class="field" style="display: flex; ">
+                                <label style="font-size: 16px; line-height: 34px; margin-right: 5px;">ISBN:</label>
+                                <input id="BookISBN" type="text" name="isbn" placeholder="Add Book by ISBN">
+                                <div id="GetBook" class="ui green button " style="white-space: nowrap;">
+                                    <!-- <i class="spinner icon turn-around"  style="font-size:16px;"></i>Waiting... -->
+                                    Get
+                                </div>
+                            </div>          
+                        </div>
+                    </div>
+                    <div>
+                        <div id="formCancel" class="ui button">Cancel</div>
+                        <div id="formSubmit" class="ui green button">Submit</div>
+                    </div>
                 </div>
+                <div id="prompt" class="ui bottom attached message hidden">
+                    ...
+                </div>
+                
             </div>
             <!-- 编辑 book -->
             <div class="editBook ui fullscreen modal transition hidden">
@@ -202,6 +240,7 @@
                 </div>
             </div>
 
+            
         </table>
     </div>
 
@@ -216,6 +255,12 @@
                 pageInit: function () {
                     $('.show-list.ui .rating').rating('disable');
                     $('.alertMSG').popup();
+                    // cover src 检查
+                    $('.item-cover').each(function(index, item) {
+                        if (item.src.split("http://localhost:3000/img/")[1].slice(0,4) === "http") {
+                            item.src = item.src.split("http://localhost:3000/img/")[1];
+                        }
+                    });
                 },
                 bindEvent: function () {
                     var editBtn = $('.edit'),
@@ -277,6 +322,40 @@
                             $(editDom).find('.editForm')[0].action = "/library/" + itemData.id + "/edit";
                         })
                     })
+
+                    // GET Book Info by ISBN 
+                    // api: https://bird.ioliu.cn/v1?url=https://api.douban.com/v2/book/isbn/<9787115275790>
+                    $('#GetBook').on('click', function() {
+                        var book_isbn = $("#BookISBN"),
+                            prompt = $('#prompt');
+                        var isbn = $(book_isbn).val();
+                        var addForm = $('.add-form');
+                        var mainTarget = $(this); 
+
+                        if (isbn) {
+                            mainTarget.addClass('disabled');
+                            mainTarget.html('<i class=\"spinner icon turn-around\"  style=\"font-size:16px;\"></i>Waiting...');
+                            $.get("https://bird.ioliu.cn/v1?url=https://api.douban.com/v2/book/isbn/"+isbn, function (data) {
+                                if (data.title) {
+                                    $(addForm).find('.name')[0].value = data.title;
+                                    $(addForm).find('.author')[0].value = data.author.join(',');
+                                    $(addForm).find('.press')[0].value = data.publisher;
+                                    $(addForm).find('.cover_url')[0].value = data.images.large;
+                                    $(addForm).find('.date')[0].value = data.pubdate;
+                                    $(addForm).find('.score')[0].value = Math.floor(data.rating.average/2);
+                                    $(addForm).find('.introduction')[0].value = data.summary;  
+                                    $(prompt).removeClass('hidden').addClass('positive').text('Get Successfully!')
+                                } else {
+                                    $(prompt).removeClass('hidden').addClass('warning').text('Can not find the book info!')
+                                }
+                                setTimeout(function () {
+                                    // $(prompt).addClass('hidden');
+                                    mainTarget.removeClass('disabled');
+                                    mainTarget.html('Get');
+                                }, 1000) 
+                            });
+                        }
+                    })
                 }
             }
             Library.init();
@@ -294,14 +373,18 @@
                                     prompt: 'Book name should not be empty'
                                 }]
                             },
+                            location: {
+                                identifier: 'location',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Book location should not be empty'
+                                }]
+                            },
                             author: {
                                 identifier: 'author',
                                 rules: [{
                                     type: 'empty',
                                     prompt: 'Author should not be empty'
-                                }, {
-                                    type: 'maxLength[20]',
-                                    prompt: 'Please limit the name to 1-10 characters'
                                 }]
                             },
                             press: {
@@ -335,13 +418,6 @@
                                     prompt: 'Date should not be empty'
                                 }]
                             },
-                            cover: {
-                                identifier: 'cover',
-                                rules: [{
-                                    type: 'empty',
-                                    prompt: 'Cover should not be empty'
-                                }]
-                            },
                             introduction: {
                                 identifier: 'introduction',
                                 rules: [{
@@ -370,14 +446,18 @@
                                     prompt: 'Book name should not be empty'
                                 }]
                             },
+                            name: {
+                                identifier: 'location',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Book location should not be empty'
+                                }]
+                            },
                             author: {
                                 identifier: 'author',
                                 rules: [{
                                     type: 'empty',
                                     prompt: 'Author should not be empty'
-                                }, {
-                                    type: 'maxLength[20]',
-                                    prompt: 'Please limit the name to 1-10 characters'
                                 }]
                             },
                             press: {

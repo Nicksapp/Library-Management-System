@@ -5,6 +5,7 @@ var router = express.Router();
 
 var LibraryModel = require('../models/library');
 var BorrowBookModel = require('../models/borrowBooks');
+var UserModel = require('../models/users');
 var checkLogin = require('../middlewares/check').checkLogin;
 var checkIsAdmin = require('../middlewares/check').checkIsAdmin;
 
@@ -41,12 +42,13 @@ router.post('/', checkIsAdmin, function (req, res, next) {
     var bookData = {
         admin: req.session.user._id,
         name: req.fields.name,
+        location: req.fields.location,
         author: req.fields.author,
         press: req.fields.press,
         inventory: parseInt(req.fields.inventory),
         date: req.fields.date,
         score: parseInt(req.fields.score),
-        cover: req.files.cover.path.split(path.sep).pop(),
+        cover: req.fields.cover_url || req.files.cover.path.split(path.sep).pop() ,
         introduction: req.fields.introduction
     }
     // 校验参数
@@ -62,15 +64,15 @@ router.post('/', checkIsAdmin, function (req, res, next) {
         return res.redirect('back');
     }
 
-    const IDSet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];    
+    // const IDSet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];    
 
-    var IDNo = Math.floor(Math.random() * 999);
-    if ((IDNo + '').length === 2 ) {
-        IDNo = '0' + IDNo;
-    } else if ((IDNo + '').length === 1) {
-        IDNo = '00' + IDNo; 
-    }
-    var realName = bookData.name + '(' + IDSet[Math.floor(Math.random() * 25)] + IDSet[Math.floor(Math.random() * 25)]+'-'+ IDNo + ')';
+    // var IDNo = Math.floor(Math.random() * 999);
+    // if ((IDNo + '').length === 2 ) {
+    //     IDNo = '0' + IDNo;
+    // } else if ((IDNo + '').length === 1) {
+    //     IDNo = '00' + IDNo; 
+    // }
+    var realName = bookData.name + '(' + bookData.location +')';
 
     var book = {
         admin: bookData.admin,
@@ -157,7 +159,7 @@ router.post('/:bookId/edit', checkIsAdmin, function (req, res, next) {
 
 
 // POST 借书
-router.get('/:bookId/borrow', checkLogin,async function (req, res, next) {
+router.get('/:bookId/borrow', checkIsAdmin, async function (req, res, next) {
     var userId = req.session.user._id;
     var bookId = req.params.bookId;
     
@@ -175,6 +177,59 @@ router.get('/:bookId/borrow', checkLogin,async function (req, res, next) {
                 try {
                     await BorrowBookModel.create(borrow)
                     req.flash('success', 'Borrow Successfully!');
+                    res.redirect('back');
+                } catch (error) {
+                    req.flash('error', 'Something go wrong, please try again!');
+                    res.redirect('back');
+                }
+            } catch (error) {
+                req.flash('error', 'Something go wrong, please try again!');
+                res.redirect('back');
+            }
+            
+        } else {
+            req.flash('error', 'Zero inventory!');
+            res.redirect('back');
+        }
+    } catch (error) {
+        req.flash('error', 'Something go wrong, please try again!');
+        res.redirect('back');
+    }
+    
+});
+// POST 借书 By 指定 user_id
+router.get('/:bookId/borrow/:userId', checkIsAdmin, async function (req, res, next) {
+    var userId = req.params.userId;
+    var bookId = req.params.bookId;
+    
+    var user = await UserModel.getUserById(userId);
+    if (!user) {
+        req.flash('error', 'There is no Student Id exist, please try another one!');
+        res.redirect('back');
+        return false;
+    } 
+    var hasBorrowedBook = await BorrowBookModel.getBorrowBooks(user._id);
+    if (hasBorrowedBook.length >= 2) {
+        req.flash('error', 'Has reached the upper limit of the book!(One reader can only borrow 2 books at the same time)');
+        res.redirect('back');
+        return false;
+    }
+
+    var borrow = {
+        userId: user._id,
+        bookId: bookId
+    };
+
+    try {
+        var book = await LibraryModel.getRawBookById(borrow.bookId);
+        if (book.inventory >= 1) {
+            try {
+                await LibraryModel.updateBookById(borrow.bookId, '59dcc048234ad64c210a7bae', {
+                    inventory: book.inventory - 1
+                })
+                try {
+                    await BorrowBookModel.create(borrow)
+                    req.flash('success', 'Borrow Successfully by ' + userId +'!');
                     res.redirect('back');
                 } catch (error) {
                     req.flash('error', 'Something go wrong, please try again!');

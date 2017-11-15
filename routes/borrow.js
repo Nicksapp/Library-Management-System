@@ -22,7 +22,7 @@ router.get('/:bookId', checkIsAdmin, async function (req, res, next) {
                 borrowTime: user.created_at
             })
         });
-        
+        // 获得一本书已借的用户
         setTimeout(function() {
             res.render('borrow', {
                 borrowUser: result

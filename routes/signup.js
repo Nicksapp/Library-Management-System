@@ -6,14 +6,15 @@ var router = express.Router();
 
 var UserModel = require('../models/users');
 var checkNotLogin = require('../middlewares/check').checkNotLogin;
+var checkIsAdmin = require('../middlewares/check').checkIsAdmin;
 
 // GET /signup 注册页
-router.get('/', checkNotLogin, function (req, res, next) {
+router.get('/', checkIsAdmin, function (req, res, next) {
     res.render('signup');
 });
 
 // POST /signup 用户注册
-router.post('/', checkNotLogin, function (req, res, next) {
+router.post('/', checkIsAdmin, function (req, res, next) {
     var userData = {
         id: req.fields.id,
         name: req.fields.name,
@@ -55,7 +56,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
             user = result.ops[0];
             // 将用户信息存入 session
             delete user.password;
-            req.session.user = user;
+            // req.session.user = user;
             // 写入 flash
             req.flash('success', '注册成功');
             // 跳转到首页

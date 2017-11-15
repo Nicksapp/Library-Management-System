@@ -1,6 +1,5 @@
-<div class="ui menu <%if (user) {%><% if (user.isAdmin) {%> inverted <% } %> <% } %>">
-    <div class="header item">Library</div>
-    <!-- <a class="active item">Link</a> -->
+<div class="ui menu <%if (user) {%><% if (user.isAdmin) {%> inverted <% } %> <% } %>" style="border-radius: 0;">
+    <a class="item" href="/"><i class="home icon"></i>Home</a>
     <!-- <a class="item">Link</a> -->
    
     <div class="right menu">
@@ -20,25 +19,24 @@
         </div>
        
         <% if (user) { %>
-            <a class="item" href="/profile/<%= user._id %>"><%= user.name %></a>
+            <a class="item" href="/profile/<%= user._id %>"><i class="user icon"></i><%= user.name %></a>
             <div class="divider"></div>
-            <a class="item" href="/signout">Sign out</a>
+            <a class="item" href="/signout"><i class="sign out icon"></i>Sign out</a>
             <% if (user.isAdmin) {%>
                 <div class="ui dropdown item">
                     <i class="icon bars"></i>
                     <div class="menu">
-                        <a class="item" href="/library">Library management</a>
+                        <a class="item" href="/library"><i class="configure icon"></i>Library management</a>
+                        <a class="item" href="/quick_borrow"><i class="exchange icon"></i>Quick Borrow&Return</a>
+                        <a class="item" href="/signup"><i class="add user icon"></i>Sign up</a>
                     </div>
                 </div>
             <% } else { %>
                 <div></div>
             <% } %>
         <% } else { %>
-            <a class="item" href="/signin">Sign in</a>
-            <a class="item" href="/signup">Sign up</a>
+            <a class="item" href="/signin"><i class="sign in icon"></i>Sign in</a>
         <% } %>
-       
-        
     </div>
 </div>
 <script>

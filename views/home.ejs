@@ -30,6 +30,12 @@
     <script>
         $(document).ready(function () {
             $('.ui .rating').rating('disable');
+            // cover src 检查
+            $('.imgTarget').each(function (index, item) {
+                if (item.src.split("http://localhost:3000/img/")[1].slice(0, 4) === "http") {
+                    item.src = item.src.split("http://localhost:3000/img/")[1];
+                }
+            });
         })
     </script>
 <%- include('./layout/footer') %>
