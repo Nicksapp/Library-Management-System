@@ -17,11 +17,15 @@
                     </p>
                     <p>
                         <span style="color: #666666;">Gender</span>:
-                        <%= profile.gender%>
+                        <span data-gender="<%= profile.gender%>" class="gender"></span>
                     </p>
                     <p>
                         <span style="color: #666666;">Introduction</span>:
                         <%= profile.bio%>
+                    </p>
+                    <p>
+                        <span style="color: #666666;">Arrears</span>:
+                        <span class="arrear"></span>        
                     </p>
                 </div>
             </div>
@@ -41,19 +45,28 @@
                    <% borrow.forEach(function(item) {%>
                     <div class="borrowItem item" data-id="<%= item.id %>" data-bookid="<%= item.bookId%>">
                         <div class="ui small image">
-                            <img class="item-cover" style="height: 180px;" src="/img/<%= item.cover %>">
+                            <a href="/library/<%= item.bookId %>"><img class="item-cover" style="height: 180px;" src="/img/<%= item.cover %>"></a>
                         </div>
                         <div class="content">
-                            <div class="header"><%= item.name %></div>
-                            <div class="meta" style="display: flex; justify-content: space-between;">
-                                <div>
+                            <div class="header">
+                                <a href="/library/<%= item.bookId %>"><%= item.name %></a>
+                            </div>
+                            <div class="meta" >
+                                <div style="display: flex; justify-content: space-between;">
                                     <span class="price"><%= item.author %></span>
-                                    <span class="stay"><%= item.created_at %> (borrowed time)</span>
+                                    <span class="borrowId"><%= item.id %></span>
                                 </div>
-                                <span class="stay" style="color: red;">Please return the book before <%= item.returnTime %></span>
+                                <div  style="margin-top: 10px;display: flex; justify-content: space-between;">
+                                    <span class="stay">Borrow time: <%= item.created_at %> </span>
+                                    <div class="stay" style="color: red;">
+                                        Expire date: <i class="expire_date" style="font-style: normal;"><%= item.returnTime %></i> 
+                                    </div>
+                                </div>
                             </div>
                             <div class="description">
-                                <p><%= item.introduction %></p>
+                                <p class="text-overflow" style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 3; overflow: hidden; ">
+                                    <%= item.introduction %>
+                                </p>
                             </div>
                             <% if(user._id == '59dcc048234ad64c210a7bae'){%>
                             <div class="extra returnBtn">
@@ -84,6 +97,15 @@
     <script>
         $(function () {
             $('.ui .rating').rating('disable');
+            // gender 性别修正
+            var $gender = $('.gender');
+            var gender = $gender.data('gender');
+            switch (gender) {
+                case 'm': $gender.text('male');break;
+                case 'f': $gender.text('female');break;
+                default: $gender.text('secret');
+            }
+
             // 删除
             var returnBtn = $('.returnBtn');
             $.each(returnBtn, function (index, item) {
@@ -101,6 +123,38 @@
                     item.src = item.src.split("http://localhost:3000/img/")[1];
                 }
             });
+
+
+            var date = new Date();  
+            var expire_date = [];
+            $('.borrowItem').each(function(index, item) {
+                expire_date.push($(item).find('.expire_date').text())
+            })
+
+            var today = {
+                year: date.getFullYear(),
+                month: date.getMonth(),
+                day: date.getDate()
+            }
+            var allDay = 0;
+            expire_date.forEach(function(item, index) {
+                var e_date = {
+                    year: item.split('-')[0],
+                    month: item.split('-')[1],
+                    day: item.split('-')[2]
+                }
+                var temp = {
+                    year: today.year - e_date.year,
+                    month: today.month - e_date.month,
+                    day: today.day - e_date.day
+                }
+                if (temp.year >= 0 && temp.month >= 0 && temp.day > 0) {
+                    allDay += temp.year*365 + temp.month*30 + temp.day
+                }
+            })
+            $('.arrear').text(
+                allDay === 0 ? 'no arrears' : allDay + '元'
+            )
         })
     </script>
     <%- include('./layout/footer') %>

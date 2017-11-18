@@ -19,7 +19,9 @@ router.get('/:bookId', checkIsAdmin, async function (req, res, next) {
                 name: userInfo.name,
                 id: userInfo.id,
                 avatar: userInfo.avatar,
-                borrowTime: user.created_at
+                borrowTime: user.created_at,
+                borrowId: user._id,
+                bookId: bookId
             })
         });
         // 获得一本书已借的用户

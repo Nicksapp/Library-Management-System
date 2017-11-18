@@ -46,9 +46,15 @@
             $sSubmit = $('#realSearchPath');
         
         $search.on('click', function(e) {
-            var sData = $sInput[0].value;
+            var sData = $sInput[0].value,
+                pathname = window.location.href,
+                type = 'home';
+            
+            if (pathname.match(/(library)/)) {
+                type = 'library';
+            }
             if (sData) {
-                $sSubmit[0].href = '/search/' + encodeURIComponent(sData);
+                $sSubmit[0].href = '/search/' + encodeURIComponent(sData) + '?type=' + type;
             }else {
                 e.preventDefault();
             }

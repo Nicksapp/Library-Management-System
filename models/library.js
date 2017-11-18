@@ -41,6 +41,11 @@ module.exports = {
             .sort({ _id: -1 })
             .exec();
     },
+    checkBook: function(bookName) {
+        return Library
+                .find({ name: bookName })
+                .exec();
+    },
     // 通过book id 获取book（编辑book）
     getRawBookById: function (bookId) {
         return Library

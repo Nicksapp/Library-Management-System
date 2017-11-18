@@ -58,7 +58,7 @@ router.post('/', checkIsAdmin, function (req, res, next) {
             delete user.password;
             // req.session.user = user;
             // 写入 flash
-            req.flash('success', '注册成功');
+            req.flash('success', 'Registration success');
             // 跳转到首页
             res.redirect('/home');
         })
@@ -67,7 +67,7 @@ router.post('/', checkIsAdmin, function (req, res, next) {
             fs.unlink(req.files.avatar.path);
             // 用户名被占用则跳回注册页，而不是错误页
             if (e.message.match('E11000 duplicate key')) {
-                req.flash('error', '用户名已被占用');
+                req.flash('error', 'This Student\'s ID has been used, please try another one!');
                 return res.redirect('/signup');
             }
             next(e);

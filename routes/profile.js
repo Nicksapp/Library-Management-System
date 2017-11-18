@@ -71,4 +71,30 @@ router.get('/:borrowId/return/:bookId', checkIsAdmin, async function (req, res, 
     }
 });
 
+// POST return book 还书
+router.get('/:bookId/return2/:userId', checkIsAdmin, async function (req, res, next) {
+    var bookId = req.params.bookId,
+        userId = req.params.userId; // 学号
+    
+    var user = await UserModel.getUserById(userId);
+   
+    try {
+        await BorrowBookModel.returnBookByBookId(bookId, user._id); // bookid, user._id
+        var book = await LibraryModel.getRawBookById(bookId);
+        try {
+            await LibraryModel.updateBookById(bookId, '59dcc048234ad64c210a7bae', {
+                inventory: book.inventory + 1
+            })
+            req.flash('success', 'Return Successfully!');
+            res.redirect('back');
+        } catch (e) {
+            req.flash('error', 'Something go wrong, please try again!');
+            res.redirect('back');
+        } 
+    } catch (error) {
+        req.flash('error', 'Can\'t find the borrowed record, please try again!');
+        res.redirect('back');
+    }
+});
+
 module.exports = router;

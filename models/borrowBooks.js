@@ -26,5 +26,13 @@ module.exports = {
                     .sort({ _id: 1 })
                     .addCreatedAt()
                     .exec();
+    },
+    returnBookByBookId: function(bookId, userId) {
+        return BorrowBooks
+                    .remove({ 
+                        bookId: bookId,
+                        userId: userId
+                    })
+                    .exec()
     }
 }

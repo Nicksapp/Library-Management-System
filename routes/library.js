@@ -36,7 +36,7 @@ router.get('/', checkIsAdmin, async function (req, res, next) {
 });
 
 // POST  Add Book
-router.post('/', checkIsAdmin, function (req, res, next) {
+router.post('/', checkIsAdmin, async function (req, res, next) {
     var admin = req.session.user._id;
 
     var bookData = {
@@ -64,14 +64,6 @@ router.post('/', checkIsAdmin, function (req, res, next) {
         return res.redirect('back');
     }
 
-    // const IDSet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];    
-
-    // var IDNo = Math.floor(Math.random() * 999);
-    // if ((IDNo + '').length === 2 ) {
-    //     IDNo = '0' + IDNo;
-    // } else if ((IDNo + '').length === 1) {
-    //     IDNo = '00' + IDNo; 
-    // }
     var realName = bookData.name + '(' + bookData.location +')';
 
     var book = {
@@ -87,7 +79,10 @@ router.post('/', checkIsAdmin, function (req, res, next) {
         pv: 0
     };
     
-    LibraryModel.create(book)
+    var checkBook = await LibraryModel.checkBook(book.name);
+
+    if (!checkBook.length) {
+        LibraryModel.create(book)
         .then(function (result) {
             // 此 post 是插入 mongodb 后的值，包含 _id
             book = result.ops[0];
@@ -96,6 +91,11 @@ router.post('/', checkIsAdmin, function (req, res, next) {
             res.redirect(`/library`);
         })
         .catch(next);
+    } else {
+        req.flash('error', 'This book has already exist!');
+        res.redirect(`/library`);
+    }
+    
 });
 
 // GET /library/:bookId 单独的 book
@@ -245,7 +245,7 @@ router.get('/:bookId/borrow/:userId', checkIsAdmin, async function (req, res, ne
             res.redirect('back');
         }
     } catch (error) {
-        req.flash('error', 'Something go wrong, please try again!');
+        req.flash('error', 'Your book Id maybe wrong, please try again!');
         res.redirect('back');
     }
     

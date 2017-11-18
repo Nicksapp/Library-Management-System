@@ -33,7 +33,11 @@ router.post('/', checkNotLogin, function (req, res, next) {
             // 跳转到主页
             res.redirect('/home');
         })
-        .catch(next);
+        .catch(function(e) {
+            req.flash('error', 'This user has not registered yet!');
+            res.redirect('/signin');
+            next(e)
+        });
 });
 
 

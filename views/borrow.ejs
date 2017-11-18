@@ -12,6 +12,7 @@
                 <p><span style="color: #666;">Borrow Time</span>: <%= user.borrowTime%></p>
             </div>
         </div>
+        <a style="height: 35px;margin-top: 15px;" class="ui button primary" href="/profile/<%= user.borrowId%>/return/<%= user.bookId %>">Return</a>
     </div>
     <% }) %>
 </div>
